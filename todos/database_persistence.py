@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class DatabasePersistence:
     def __init__(self, session):
         if os.environ.get('FLASK_ENV') == 'production':
-            self.conn = psycopg2.connection(dbname=os.environ['DATABASE_URL'])
+            self.conn = psycopg2.connect(dbname=os.environ['DATABASE_URL'])
         else:
             self.conn = psycopg2.connect(dbname='todos')
         self._db_setup()
