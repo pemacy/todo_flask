@@ -15,7 +15,7 @@ class DatabasePersistence:
             self.conn = psycopg2.connect(os.environ['DATABASE_URL'])
         else:
             self.conn = psycopg2.connect(dbname='todos')
-        self._db_setup()
+            self._db_setup()
         self.session = session
 
     def _db_setup(self):
