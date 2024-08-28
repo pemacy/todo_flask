@@ -23,38 +23,36 @@ class DatabasePersistence:
         self._create_todos_table()
 
     def _create_lists_table(self):
-        with psycopg2.connect(dbname='todos') as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(
-                        "SELECT 1 FROM pg_tables WHERE tablename = 'lists'")
-                exists = cursor.fetchone()
-                if not exists:
-                    query = """
-                               CREATE TABLE lists(
-                               id serial PRIMARY KEY,
-                               title text NOT NULL UNIQUE CHECK(LENGTH(title) > 0)
-                               )
-                            """
-                    cursor.execute(query)
-                    logger.info(f"Executing query: {query}")
+        with self.conn.cursor() as cursor:
+            cursor.execute(
+                    "SELECT 1 FROM pg_tables WHERE tablename = 'lists'")
+            exists = cursor.fetchone()
+            if not exists:
+                query = """
+                           CREATE TABLE lists(
+                           id serial PRIMARY KEY,
+                           title text NOT NULL UNIQUE CHECK(LENGTH(title) > 0)
+                           )
+                        """
+                cursor.execute(query)
+                logger.info(f"Executing query: {query}")
 
     def _create_todos_table(self):
-        with psycopg2.connect(dbname='todos') as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(
-                        "SELECT 1 FROM pg_tables WHERE tablename = 'todos'")
-                exists = cursor.fetchone()
-                if not exists:
-                    query = """
-                               CREATE TABLE lists(
-                               id serial PRIMARY KEY,
-                               title text NOT NULL CHECK(LENGTH(title) > 0),
-                               completed boolean DEFAULT false,
-                               list_id int NOT NULL REFERENCES lists(id) ON DELETE CASCADE
-                               )
-                            """
-                    cursor.execute(query)
-                    logger.info(f"Executing query: {query}")
+        with self.conn.cursor() as cursor:
+            cursor.execute(
+                    "SELECT 1 FROM pg_tables WHERE tablename = 'todos'")
+            exists = cursor.fetchone()
+            if not exists:
+                query = """
+                           CREATE TABLE lists(
+                           id serial PRIMARY KEY,
+                           title text NOT NULL CHECK(LENGTH(title) > 0),
+                           completed boolean DEFAULT false,
+                           list_id int NOT NULL REFERENCES lists(id) ON DELETE CASCADE
+                           )
+                        """
+                cursor.execute(query)
+                logger.info(f"Executing query: {query}")
 
     def find_todo(self, todo_id):
         with self.conn.cursor(cursor_factory=extras.DictCursor) as cur:
