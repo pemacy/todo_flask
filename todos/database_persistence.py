@@ -52,7 +52,7 @@ class DatabasePersistence:
             logger.info(f"exists: {exists}")
             if not exists:
                 query = """
-                           CREATE TABLE lists(
+                           CREATE TABLE todos(
                            id serial PRIMARY KEY,
                            title text NOT NULL CHECK(LENGTH(title) > 0),
                            completed boolean DEFAULT false,
