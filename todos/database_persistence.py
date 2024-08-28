@@ -24,9 +24,12 @@ class DatabasePersistence:
 
     def _create_lists_table(self):
         with self.conn.cursor() as cursor:
-            cursor.execute(
-                    "SELECT 1 FROM pg_tables WHERE tablename = 'lists'")
-            exists = cursor.fetchone()
+            cursor.execute("""
+                       SELECT COUNT(*)
+                       FROM information_schema.tables
+                       WHERE table_schema = 'public' AND table_name = 'lists';
+                           """)
+            exists = cursor.fetchone()[0] != 0
             if not exists:
                 query = """
                            CREATE TABLE lists(
@@ -39,9 +42,12 @@ class DatabasePersistence:
 
     def _create_todos_table(self):
         with self.conn.cursor() as cursor:
-            cursor.execute(
-                    "SELECT 1 FROM pg_tables WHERE tablename = 'todos'")
-            exists = cursor.fetchone()
+            cursor.execute("""
+                       SELECT COUNT(*)
+                       FROM information_schema.tables
+                       WHERE table_schema = 'public' AND table_name = 'todos';
+                           """)
+            exists = cursor.fetchone()[0] != 0
             if not exists:
                 query = """
                            CREATE TABLE lists(
