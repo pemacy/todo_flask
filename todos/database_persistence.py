@@ -30,6 +30,7 @@ class DatabasePersistence:
                        WHERE table_schema = 'public' AND table_name = 'lists';
                            """)
             exists = cursor.fetchone()[0] != 0
+            logger.info(f"exists: {exists}")
             if not exists:
                 query = """
                            CREATE TABLE lists(
@@ -48,6 +49,7 @@ class DatabasePersistence:
                        WHERE table_schema = 'public' AND table_name = 'todos';
                            """)
             exists = cursor.fetchone()[0] != 0
+            logger.info(f"exists: {exists}")
             if not exists:
                 query = """
                            CREATE TABLE lists(
